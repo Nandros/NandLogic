@@ -1,17 +1,10 @@
-# cmake_minimum_required(VERSION 3.15)
-
-# project(NandLogic LANGUAGES C CXX VERSION 5.1)
-
-# add_executable(NandLogic main.cpp)
-
-# find_package(RmlUi CONFIG REQUIRED)
-# target_link_libraries(NandLogic PRIVATE RmlUi::RmlUi)
+# CMake For NandLogic project using RayLib
 
 cmake_minimum_required(VERSION 3.15)
 
 # Project name and version
 set(PROJECT_NAME "NandLogic")
-set(TARGET_NAME "${RMLUI_SAMPLE_PREFIX}${PROJECT_NAME}")
+set(TARGET_NAME "${PROJECT_NAME}")
 project(${PROJECT_NAME} VERSION 1.0 LANGUAGES CXX)
 
 # Set C++ standard
@@ -19,31 +12,29 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Include RmlUi library
-# find_package(RmlUi CONFIG REQUIRED)
+# Adding Raylib
+include(FetchContent)
+set(FETCHCONTENT_QUIET FALSE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example games
 
+FetchContent_Declare(
+	raylib
+	GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
+	GIT_TAG "5.5"
+	GIT_PROGRESS TRUE
+)
 
-set(RMLUI_SHELL ON) # To enable backends
-set(RMLUI_IS_ROOT_PROJECT ON) # Because RmlUi is include via add_subdirectory
-add_subdirectory(RmlUi)
+set_target_properties(game PROPERTIES ENABLE_EXPORTS on)
 
-include_directories(RmlUi/Include)
-include_directories(RmlUi)
+FetchContent_MakeAvailable(raylib)
 
-# Add your source files
-# set(SOURCES main.cpp)
-# add_executable(NandLogic ${SOURCES})
-
+add_executable(${PROJECT_NAME} ${ui_sources})
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib  game)
 
 add_executable(${TARGET_NAME} WIN32
 	main.cpp
 )
 
-set_common_target_options(${TARGET_NAME})
-
-target_link_libraries(${TARGET_NAME} PRIVATE rmlui_shell)
-
-install_sample_target(${TARGET_NAME})
-
 # Add a message to indicate success
-message(STATUS "RmlUi project configured successfully!")
+message(STATUS "NandLogic project configured successfully!")

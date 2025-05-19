@@ -1,87 +1,23 @@
-#include <iostream>
+/**
+ * @file main.cpp
+ * @author Nathan.A (nathan.andre.etudiant@gmail.com)
+ * @brief A Project inspired by Digital Logic Sim from Sebastian Lague
+ * @version 0.1
+ * @date 2025-05-19
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 
-#include <RmlUi/Core.h>
-#include <RmlUi/Debugger.h>
-#include <Backends/RmlUi_Backend.h>
-
-// KeyDownCallback type
-bool keyDownCb(Rml::Context *context, Rml::Input::KeyIdentifier key, int key_modifier, float native_dp_ratio, bool priority) {
-    std::cout << "[keyDownCb] Key input : " << (uint16_t)key << std::endl;
-
-    return true;
-}
-
-struct ApplicationData {
-    bool show_text = true;
-    Rml::String animal = "dog";
-} my_data;
-
-int main(int argc, char** argv)
+/**
+ * @brief 
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
+int main(int argc, char const *argv[])
 {
-    const int window_width = 1024;
-	const int window_height = 768;
-
-	// Initializes the shell which provides common functionality used by the included samples.
-	// if (!Shell::Initialize())
-	// 	return -1;
-
-	// Constructs the system and render interfaces, creates a window, and attaches the renderer.
-	if (!Backend::Initialize("NAND LOGIC !!!!", window_width, window_height, true))
-	{
-		// Shell::Shutdown();
-		return -1;
-	}
-
-	// Install the custom interfaces constructed by the backend before initializing RmlUi.
-	// Rml::SetSystemInterface(Backend::GetSystemInterface());
-	Rml::SetSystemInterface(Rml::GetSystemInterface());
-	Rml::SetRenderInterface(Backend::GetRenderInterface());
-
-	// RmlUi initialisation.
-	Rml::Initialise();
-
-	// Create the main RmlUi context.
-	Rml::Context* context = Rml::CreateContext("main", Rml::Vector2i(window_width, window_height));
-	if (!context)
-	{
-		Rml::Shutdown();
-		Backend::Shutdown();
-		// Shell::Shutdown();
-		return -1;
-	}
-
-	// The RmlUi debugger is optional but very useful. Try it by pressing 'F8' after starting this sample.
-	Rml::Debugger::Initialise(context);
-
-	// Fonts should be loaded before any documents are loaded.
-	// Shell::LoadFonts();
-
-	// Load and show the demo document.
-	if (Rml::ElementDocument* document = context->LoadDocument("assets/demo.rml"))
-		document->Show();
-
-	bool running = true;
-	while (running)
-	{
-		// Handle input and window events.
-		running = Backend::ProcessEvents(context, keyDownCb, true);
-
-		// This is a good place to update your game or application.
-
-		// Always update the context before rendering.
-		context->Update();
-
-		// Prepare the backend for taking rendering commands from RmlUi and then render the context.
-		Backend::BeginFrame();
-		context->Render();
-		Backend::PresentFrame();
-	}
-
-	// Shutdown RmlUi.
-	Rml::Shutdown();
-
-	Backend::Shutdown();
-	// Shell::Shutdown();
-
+	
 	return 0;
 }

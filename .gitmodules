@@ -1,3 +1,5 @@
-[submodule "RmlUi"]
-	path = RmlUi
-	url = https://github.com/mikke89/RmlUi.git
+
+[submodule "libs"]
+	path = libs
+	url = git@github.com:raysan5/raylib.git
+	branch = a1d57e83f066ac30b30d67186b44be6aeb8cce9c

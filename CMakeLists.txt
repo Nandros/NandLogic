@@ -1,5 +1,5 @@
-# CMake For NandLogic project using RayLib
 
+# CMake For NandLogic project using RayLib
 cmake_minimum_required(VERSION 3.15)
 
 # Project name and version
@@ -12,28 +12,23 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Adding Raylib
-include(FetchContent)
-set(FETCHCONTENT_QUIET FALSE)
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
-set(BUILD_GAMES    OFF CACHE BOOL "" FORCE) # don't build the supplied example games
+# Add Raylib
+set(RAYLIB_PATH "libs/Raylib")
+set(OPENGL_VERSION "3.3")
+add_subdirectory(${RAYLIB_PATH})
 
-FetchContent_Declare(
-	raylib
-	GIT_REPOSITORY "https://github.com/raysan5/raylib.git"
-	GIT_TAG "5.5"
-	GIT_PROGRESS TRUE
+# add_executable(${TARGET_NAME}
+# 	src/Util/ErrorHandler.cpp
+# 	src/main.cpp
+# )
+
+add_executable(${TARGET_NAME}
+	src/test/windowTest.cpp
 )
 
-set_target_properties(game PROPERTIES ENABLE_EXPORTS on)
-
-FetchContent_MakeAvailable(raylib)
-
-add_executable(${PROJECT_NAME} ${ui_sources})
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib  game)
-
-add_executable(${TARGET_NAME} WIN32
-	main.cpp
+# Link libraries
+target_link_libraries(${PROJECT_NAME} 
+	raylib
 )
 
 # Add a message to indicate success

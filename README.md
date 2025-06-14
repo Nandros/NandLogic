@@ -2,10 +2,30 @@
 
 ## Installation
 
+### Submodules
+
 ```bash
-cmake -B build -S . -DRMLUI_BACKEND=SDL_SDLrenderer -DCMAKE_BUILD_TYPE=Debug
-cmake --build build -j
+git submodule init
+git submodule update
+```
+
+### Build
+
+For Linux :
+
+```bash
+mkdir build
 cd build
+cmake -G "MinGW Makefiles" ..
+make
+```
+
+For windows :
+
+```bash
+mkdir build
+cd build
+cmake -G "MinGW Makefiles" ..
 make
 ```
 

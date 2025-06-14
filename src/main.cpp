@@ -9,6 +9,10 @@
  * 
  */
 
+#include "View/Window.hpp"
+
+#include <iostream>
+
 /**
  * @brief 
  * 
@@ -18,6 +22,30 @@
  */
 int main(int argc, char const *argv[])
 {
+	Window* winInst = Window::GetInstance();
+	bool wasOnScreen = false;
+
+	WindowConfig conf = {
+		.width = 800,
+		.height = 450,
+		.targetFPS = 60,
+	};
+
+	winInst->init(conf);
+
+	while (!winInst->shouldClose()) {
+		if (IsCursorOnScreen() && !wasOnScreen) {
+			wasOnScreen = true;
+			std::cout << "Entered screen" << "\n";
+		} else if (!IsCursorOnScreen() && wasOnScreen) {
+			wasOnScreen = false;
+			std::cout << "Existed screen" << "\n";
+		}
+
+		winInst->update();
+	}
+	
+	winInst->close();
 	
 	return 0;
 }

@@ -1,15 +1,15 @@
 /**
- * @file Window.hpp
- * @author Nandros
- * @brief Window is used to handle the application window.
+ * @file __template.hpp
+ * @author your name (you@domain.com)
+ * @brief Template for ciles
  * @version 0.1
  * @date 2025-05-27
  * 
  * @copyright Copyright (c) 2025
  * 
  */
-#ifndef _WINDOW_HPP_
-#define _WINDOW_HPP_
+#ifndef _TEMPLATE_HPP_
+#define _TEMPLATE_HPP_
 // --------------------------------------------------------------------------------
 //      Includes
 // --------------------------------------------------------------------------------
@@ -18,35 +18,27 @@
 #include <cstring> // Mendatory
 
 // Lib Specific
-// # Raylib
-#include "raylib.h"
-#include "GLFW/glfw3.h"
+// # Raylib     (e.g.)
+// #include "raylib.h"
 
-#include "rlgl.h"
-#include "raymath.h"
+// # ImGui      (e.g.)
+// #include "..."
+// #include "..."
+// #include "..."
+
+// # ImGui      (e.g.)
+// #include "..."
 
 // Project
+// #include "Gate.hpp"
 
 // --------------------------------------------------------------------------------
 //      Macros
 // --------------------------------------------------------------------------------
 
-#define WINDOW_ZOOM_MAX_WIDTH
-#define WINDOW_ZOOM_MAX_HEIGHT
-
 // --------------------------------------------------------------------------------
 //      Types def
 // --------------------------------------------------------------------------------
-
-typedef struct {
-    
-    uint32_t width;
-    uint32_t height;
-
-    uint8_t targetFPS;
-
-} WindowConfig;
-
 
 // --------------------------------------------------------------------------------
 //      Constants
@@ -64,35 +56,4 @@ typedef struct {
 //      Classes
 // --------------------------------------------------------------------------------
 
-class Window
-{
-private:
-    Color backgroundColor = LIGHTGRAY;
-    Camera2D camera = {0};
-    uint8_t zoomMode = 0; // 0-Mouse Wheel, 1-Mouse Move
-
-    WindowConfig conf;
-
-protected:
-    Window(void);
-    ~Window();
-
-public:
-    // Needed for singleton
-    Window(Window &other) = delete; // Not clonable
-    void operator=(const Window &) = delete;    // Not assignable
-
-    static Window* GetInstance(void);
-
-    void init(WindowConfig conf);
-    void close(void);
-
-    void setConfiguration(WindowConfig conf);
-    void getConfiguration(WindowConfig* conf) const;
-
-    bool shouldClose(void);
-    void drawCircle(void);
-    void update(void);
-};
-
-#endif  // _WINDOW_HPP_
+#endif  // _TEMPLATE_HPP_

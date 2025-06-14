@@ -17,14 +17,16 @@ set(RAYLIB_PATH "libs/Raylib")
 set(OPENGL_VERSION "3.3")
 add_subdirectory(${RAYLIB_PATH})
 
-# add_executable(${TARGET_NAME}
-# 	src/Util/ErrorHandler.cpp
-# 	src/main.cpp
-# )
+include_directories(src)
 
 add_executable(${TARGET_NAME}
-	src/test/windowTest.cpp
+	src/View/Window.cpp
+	src/main.cpp
 )
+
+# add_executable(${TARGET_NAME}
+# 	src/test/windowTest.cpp
+# )
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} 

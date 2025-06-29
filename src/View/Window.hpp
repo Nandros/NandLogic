@@ -16,6 +16,7 @@
 // Cpp standards
 #include <cstdint> // Mendatory
 #include <cstring> // Mendatory
+#include <vector>
 
 // Lib Specific
 // # Raylib
@@ -26,6 +27,8 @@
 #include "raymath.h"
 
 // Project
+#include "Model/Gate.hpp"
+#include "Model/Draggable.hpp"
 
 // --------------------------------------------------------------------------------
 //      Macros
@@ -64,7 +67,7 @@ typedef struct {
 //      Classes
 // --------------------------------------------------------------------------------
 
-class Window
+class Window : public Draggable
 {
 private:
     Color backgroundColor = LIGHTGRAY;
@@ -72,6 +75,8 @@ private:
     uint8_t zoomMode = 0; // 0-Mouse Wheel, 1-Mouse Move
 
     WindowConfig conf;
+
+    std::vector<Gate*> gates;
 
 protected:
     Window(void);
@@ -86,13 +91,21 @@ public:
 
     void init(WindowConfig conf);
     void close(void);
-
-    void setConfiguration(WindowConfig conf);
-    void getConfiguration(WindowConfig* conf) const;
-
+    
+    // Gate related methods
+    void addGate(Gate* gate);
+    void rmGate(Gate* gate);
+    
+    void drag(Vector2 vect, Camera2D cam);
+    
     bool shouldClose(void);
     void drawCircle(void);
     void update(void);
+    
+    // ----- Getter & Setter -----
+    void setConfiguration(WindowConfig conf);
+    void getConfiguration(WindowConfig* conf) const;
+    Camera2D* getCamera(void);
 };
 
 #endif  // _WINDOW_HPP_

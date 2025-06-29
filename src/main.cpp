@@ -10,8 +10,48 @@
  */
 
 #include "View/Window.hpp"
+#include "Controller/InputHandler.hpp"
 
 #include <iostream>
+
+Window* winInst = nullptr;
+Gate gateAND = Gate("AND");
+
+bool leftClick(InputEvent evt) {
+	if (evt != INPUT_EVENT_PRESSED) {
+		return false;
+	}
+
+	std::cout << "LEFT CLICK" << "\n";
+	return true;
+}
+
+bool leftDown(InputEvent evt) {
+	Camera2D* camera = Window::GetInstance()->getCamera();
+
+	if (camera == nullptr) {
+		return false;
+	}
+
+	if (evt != INPUT_EVENT_DOWN) {
+		return false;
+	}
+
+	if (winInst == nullptr) {
+		return false;
+	}
+
+	if (CheckCollisionPointRec(GetMousePosition(), gateAND.getHitBox(*camera))) {
+		std::cout << "Drag Gate" << "\n";
+		gateAND.drag(GetMouseDelta(), *camera);
+		goto funcLeftDragRet;
+	}
+	
+	winInst->drag(GetMouseDelta(), *camera);
+
+funcLeftDragRet:
+	return true;
+}
 
 /**
  * @brief 
@@ -22,7 +62,9 @@
  */
 int main(int argc, char const *argv[])
 {
-	Window* winInst = Window::GetInstance();
+	InputHandler* inptsHandle = InputHandler::GetInstance();
+
+	winInst = Window::GetInstance();
 	bool wasOnScreen = false;
 
 	WindowConfig conf = {
@@ -33,14 +75,14 @@ int main(int argc, char const *argv[])
 
 	winInst->init(conf);
 
+	winInst->addGate(&gateAND);
+
+	inptsHandle->attach(MOUSE_BUTTON_LEFT, leftClick);
+	inptsHandle->attach(MOUSE_BUTTON_LEFT, leftDown);
+
 	while (!winInst->shouldClose()) {
-		if (IsCursorOnScreen() && !wasOnScreen) {
-			wasOnScreen = true;
-			std::cout << "Entered screen" << "\n";
-		} else if (!IsCursorOnScreen() && wasOnScreen) {
-			wasOnScreen = false;
-			std::cout << "Existed screen" << "\n";
-		}
+		inptsHandle->tickKeyboard();
+		inptsHandle->tickMouse();
 
 		winInst->update();
 	}

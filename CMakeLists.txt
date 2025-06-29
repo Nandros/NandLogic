@@ -20,6 +20,8 @@ add_subdirectory(${RAYLIB_PATH})
 include_directories(src)
 
 add_executable(${TARGET_NAME}
+	src/Controller/InputHandler.cpp
+	src/Model/Gate.cpp
 	src/View/Window.cpp
 	src/main.cpp
 )

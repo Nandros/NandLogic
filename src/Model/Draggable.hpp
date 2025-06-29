@@ -1,36 +1,30 @@
 /**
- * @file Gate.cpp
- * @author Nandros (nathan.andre.etudiant@gmail.com)
- * @brief Class used to represent all gates. A Gates is an atomical element, you can't have 
+ * @file Draggable.hpp
+ * @author Nandros
+ * @brief Abstract class to drag object on the screen (Gate, Window, ...).
  * @version 0.1
  * @date 2025-05-27
  * 
  * @copyright Copyright (c) 2025
  * 
  */
-#ifndef _GATE_
-#define _TEMPLATE_HPP_
+#ifndef _DRAGGABLE_HPP_
+#define _DRAGGABLE_HPP_
 // --------------------------------------------------------------------------------
 //      Includes
 // --------------------------------------------------------------------------------
 // Cpp standards
 #include <cstdint> // Mendatory
 #include <cstring> // Mendatory
-#include <string>
 
 // Lib Specific
-// # Raylib     (e.g.)
+// # Raylib
 #include "raylib.h"
 
-// Project
-#include "Model/Draggable.hpp"
 
 // --------------------------------------------------------------------------------
 //      Macros
 // --------------------------------------------------------------------------------
-
-#define GATE_MINIMAL_WIDTH  100
-#define GATE_MINIMAL_HEIGHT 100
 
 // --------------------------------------------------------------------------------
 //      Types def
@@ -52,36 +46,10 @@
 //      Classes
 // --------------------------------------------------------------------------------
 
-class Gate : public Draggable
+class Draggable
 {
-private:
-
-    /**
-     * @brief Id is the unique name of a gate.
-     * 
-     */
-    std::string id;
-
-    /**
-     * @brief Store the origin and size of the gate
-     * 
-     */
-    Rectangle shapeBox;
-    
-    Color color;
-    uint8_t fontSize;
-
 public:
-    Gate(std::string id);
-    ~Gate();
-
-    Rectangle getHitBox(Camera2D camera);
-    
-    void drag(Vector2 vect, Camera2D cam);
-
-    void draw(void);
-
-    std::string getId(void);
+    virtual void drag(Vector2 delta, Camera2D cam) = 0;
 };
 
-#endif  // _TEMPLATE_HPP_
+#endif  // _DRAGGABLE_HPP_

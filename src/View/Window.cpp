@@ -41,7 +41,7 @@
 //      Globals
 // --------------------------------------------------------------------------------
 
-Window* pinstance_ = {nullptr};
+Window* pWindowInstance_ = {nullptr};
 
 // --------------------------------------------------------------------------------
 //      Prototypes
@@ -69,11 +69,11 @@ Window::~Window() {
 // --------------------------------------------------------------------------------
 
 Window* Window::GetInstance(void) {
-    if (pinstance_ == nullptr) {
-        pinstance_ = new Window();
+    if (pWindowInstance_ == nullptr) {
+        pWindowInstance_ = new Window();
     }
     
-    return pinstance_;
+    return pWindowInstance_;
 }
 
 void Window::init(WindowConfig conf) {
@@ -118,13 +118,6 @@ void Window::update(void) {
     }
     
     // Translate based on mouse right click
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-    {
-        Vector2 delta = GetMouseDelta();
-        delta = Vector2Scale(delta, -1.0f/this->camera.zoom);
-        this->camera.target = Vector2Add(this->camera.target, delta);
-    }
-
     if (this->zoomMode == 0)
     {
         // Zoom based on mouse wheel
@@ -186,7 +179,21 @@ void Window::update(void) {
 
             // Draw a reference circle
             DrawCircle(GetScreenWidth()/2, GetScreenHeight()/2, 50, MAROON);
+
+            Vector2 vects[] = {
+                {.x = 50, .y = 0},
+                {.x = 100, .y = 50},
+                {.x = 50, .y = 100},
+                {.x = 0, .y = 50},
+                {.x = 50, .y = 0}
+            };
+            uint8_t nbPts = 5;
+            DrawTriangleFan(vects, nbPts, RED);
             
+            for (uint16_t i = 0; i < this->gates.size(); i++) {
+                this->gates.at(i)->draw();
+            }
+
         EndMode2D();
         
         // Draw mouse reference
@@ -194,13 +201,71 @@ void Window::update(void) {
         DrawCircleV(GetMousePosition(), 4, DARKGRAY);
         DrawTextEx(GetFontDefault(), TextFormat("[%i, %i]", GetMouseX(), GetMouseY()), 
             Vector2Add(GetMousePosition(), (Vector2){ -44, -24 }), 20, 2, BLACK);
-
-        // DrawText("[1][2] Select mouse zoom mode (Wheel or Move)", 20, 20, 20, DARKGRAY);
-        // if (zoomMode == 0) DrawText("Mouse left button drag to move, mouse wheel to zoom", 20, 50, 20, DARKGRAY);
-        // else DrawText("Mouse left button drag to move, mouse press and move to zoom", 20, 50, 20, DARKGRAY);
     
     EndDrawing();
 }
+
+/**
+ * @brief Add a Gate object to the list of object to render
+ * 
+ * @param gate Pointer of the Gate object
+ */
+void Window::addGate(Gate* gate) {
+
+    this->gates.push_back(gate);
+
+}
+
+/**
+ * @brief Remove a Gate object from the list of object to render
+ * 
+ * @param gate Pointer of the Gate object
+ */
+void Window::rmGate(Gate* gate) {
+
+    for (uint16_t i = 0; i < this->gates.size(); i++) {
+        if (gate->getId() == this->gates.at(i)->getId()) {
+            this->gates.erase(this->gates.begin() + i);
+            break;
+        }
+    }
+
+}
+
+void Window::drag(Vector2 vect, Camera2D cam) {
+
+    Vector2 delta = vect;
+    delta = Vector2Scale(delta, -1.0f/cam.zoom);
+    this->camera.target = Vector2Add(cam.target, delta);
+
+}
+
+// Draw textured polygon, defined by vertex and texture coordinates
+// NOTE: Polygon center must have straight line path to all points
+// without crossing perimeter, points must be in anticlockwise order
+// void DrawTexturePoly(Texture2D texture, Vector2 center, Vector2 *points, Vector2 *texcoords, int pointCount, Color tint)
+// {
+//     rlBegin(RL_TRIANGLES);
+    
+//     rlSetTexture(texture.id);
+
+//         rlColor4ub(tint.r, tint.g, tint.b, tint.a);
+
+//         for (int i = 0; i < pointCount - 1; i++)
+//         {
+//             rlTexCoord2f(0.5f, 0.5f);
+//             rlVertex2f(center.x, center.y);
+
+//             rlTexCoord2f(texcoords[i].x, texcoords[i].y);
+//             rlVertex2f(points[i].x + center.x, points[i].y + center.y);
+
+//             rlTexCoord2f(texcoords[i + 1].x, texcoords[i + 1].y);
+//             rlVertex2f(points[i + 1].x + center.x, points[i + 1].y + center.y);
+//         }
+//     rlEnd();
+
+//     rlSetTexture(0);
+// }
 
 // --------------------------------------------------------------------------------
 //      Getter & Setter
@@ -213,4 +278,8 @@ void Window::setConfiguration(WindowConfig conf) {
 void Window::getConfiguration(WindowConfig* conf) const {
     *conf = this->conf;
     return;
+}
+
+Camera2D* Window::getCamera(void) {
+    return &this->camera;
 }

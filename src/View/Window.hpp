@@ -27,6 +27,8 @@
 #include "raymath.h"
 
 // Project
+#include "View/Context.hpp"
+
 #include "Model/Gate.hpp"
 #include "Model/Draggable.hpp"
 
@@ -75,6 +77,14 @@ private:
     uint8_t zoomMode = 0; // 0-Mouse Wheel, 1-Mouse Move
 
     WindowConfig conf;
+
+    /**
+     * 2D array of context.
+     * 
+     * See doc for disposition and maniulations.
+     * 
+     */
+    std::vector<std::vector<Context*>> ctxList;
 
     std::vector<Gate*> gates;
 
